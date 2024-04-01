@@ -24,8 +24,11 @@ namespace PhoneStoreBackend.Services
 
         public async Task<string> AddProduct(Product product)
         {
-
-            product.ImagePath = "";
+            if (product.ImagePath == null)
+            {
+                product.ImagePath = "";
+            }
+            
 
             await _productRepository.AddProduct(product);
 
@@ -49,6 +52,11 @@ namespace PhoneStoreBackend.Services
             
         }
 
+        public async Task<Product> GetProductById(int id)
+        {
+            return await _productRepository.GetProductById(id);
+        }
+
 
 
         public async Task<string> UpdateProduct(Product product)
@@ -66,6 +74,7 @@ namespace PhoneStoreBackend.Services
             new_product.Memory = product.Memory;
             new_product.CameraPx = product.CameraPx;
             new_product.BatteryCapacity = product.BatteryCapacity;
+            new_product.ImagePath = product.ImagePath;
 
             await _productRepository.UpdateProduct(new_product);
             return "True";

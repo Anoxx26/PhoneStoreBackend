@@ -27,5 +27,7 @@
         public int BatteryCapacity { get; set; }
 
         public required string Color { get; set; }
+
+        public string ImagePath { get; set; }
     }
 }

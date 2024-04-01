@@ -38,6 +38,22 @@ namespace PhoneStoreBackend.Controllers
         public async Task<ActionResult<string>> AddProduct(ProductDTO productDTO)
         {
             return await _productService.AddProduct(_mapper.Map<Product>(productDTO));
+        
+        }
+
+        [Authorize]
+        [HttpGet("GetProductById")]
+        public async Task<ActionResult<Product>> GetProductById(int id)
+        {
+            return await _productService.GetProductById(id);
+        }
+
+        [Authorize]
+        [HttpPost("UpdateProduct")]
+        public async Task<ActionResult<string>> UpdateProduct(ProductDTO productDTO)
+        {
+            return await _productService.UpdateProduct(_mapper.Map<Product>(productDTO));
+
         }
 
         [Authorize]

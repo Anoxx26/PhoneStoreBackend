@@ -6,7 +6,7 @@ namespace PhoneStoreBackend.Repositories
 {
     public class UserRepository
     {
-        private ApplicationContext _context;
+        private readonly ApplicationContext _context;
 
         public UserRepository(ApplicationContext context)
         {
@@ -21,6 +21,18 @@ namespace PhoneStoreBackend.Repositories
         public async Task<User> GetUserById(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.UserId == id);
+        }
+
+        public async Task<User> GetUserByUsername(string username)
+        {
+
+            return await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
+           
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task AddUser(User user)

@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using PhoneStoreBackend.Models;
+using PhoneStoreBackend.Models.DTOs;
 using PhoneStoreBackend.Services;
 
 namespace PhoneStoreBackend.Controllers
 {
     [ApiController]
+    [EnableCors("AllowAll")]
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
@@ -21,10 +26,25 @@ namespace PhoneStoreBackend.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
-        public ActionResult<string> Test()
+        
+        [HttpGet("GetProducts")]
+        public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            return "Test";
+            return await _productService.GetAllProducts();
+        }
+
+        [Authorize]
+        [HttpPost("AddProduct")]
+        public async Task<ActionResult<string>> AddProduct(ProductDTO productDTO)
+        {
+            return await _productService.AddProduct(_mapper.Map<Product>(productDTO));
+        }
+
+        [Authorize]
+        [HttpDelete("DeleteProduct")]
+        public async Task<ActionResult<string>> DeleteProduct(int phoneID)
+        {
+            return await _productService.DeleteProduct(phoneID);
         }
     }
 }

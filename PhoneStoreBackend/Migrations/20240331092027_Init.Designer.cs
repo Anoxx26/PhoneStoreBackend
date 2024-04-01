@@ -12,8 +12,8 @@ using PhoneStoreBackend.Data;
 namespace PhoneStoreBackend.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240321115249_Initial")]
-    partial class Initial
+    [Migration("20240331092027_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,73 +24,6 @@ namespace PhoneStoreBackend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("PhoneStoreBackend.Models.Brand", b =>
-                {
-                    b.Property<int>("BrandId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BrandId"));
-
-                    b.Property<string>("BrandName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("BrandId");
-
-                    b.ToTable("Brands");
-                });
-
-            modelBuilder.Entity("PhoneStoreBackend.Models.Category", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("PhoneStoreBackend.Models.Memory", b =>
-                {
-                    b.Property<int>("MemoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MemoryId"));
-
-                    b.Property<int>("MemorySize")
-                        .HasColumnType("integer");
-
-                    b.HasKey("MemoryId");
-
-                    b.ToTable("Memory");
-                });
-
-            modelBuilder.Entity("PhoneStoreBackend.Models.OperatingSystem", b =>
-                {
-                    b.Property<int>("OperatingSystemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OperatingSystemId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("OperatingSystemId");
-
-                    b.ToTable("OperatingSystem");
-                });
 
             modelBuilder.Entity("PhoneStoreBackend.Models.Order", b =>
                 {
@@ -106,7 +39,7 @@ namespace PhoneStoreBackend.Migrations
                     b.Property<DateOnly>("OrderEnd")
                         .HasColumnType("date");
 
-                    b.Property<int>("StatusOrderStatusId")
+                    b.Property<int>("StatusId")
                         .HasColumnType("integer");
 
                     b.Property<int>("TotalPrice")
@@ -117,7 +50,7 @@ namespace PhoneStoreBackend.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("StatusOrderStatusId");
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
 
@@ -127,20 +60,17 @@ namespace PhoneStoreBackend.Migrations
             modelBuilder.Entity("PhoneStoreBackend.Models.OrderDetails", b =>
                 {
                     b.Property<int>("OrderDetailsID")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderDetailsID"));
-
-                    b.Property<int>("ProductPhoneID")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("OrderDetailsID");
+                    b.HasKey("OrderDetailsID", "ProductId");
 
-                    b.HasIndex("ProductPhoneID");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -173,8 +103,9 @@ namespace PhoneStoreBackend.Migrations
                     b.Property<int>("BatteryCapacity")
                         .HasColumnType("integer");
 
-                    b.Property<int>("BrandId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("CameraPx")
                         .HasColumnType("integer");
@@ -183,18 +114,27 @@ namespace PhoneStoreBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<double>("DisplaySize")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("MemoryId")
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Memory")
                         .HasColumnType("integer");
 
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("OperatingSystemId")
-                        .HasColumnType("integer");
+                    b.Property<string>("OperatingSystem")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
                         .HasColumnType("integer");
@@ -203,39 +143,15 @@ namespace PhoneStoreBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("RamMemoryId")
+                    b.Property<int>("RamMemory")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("ReleaseDate")
+                        .HasColumnType("integer");
 
                     b.HasKey("PhoneID");
 
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("MemoryId");
-
-                    b.HasIndex("OperatingSystemId");
-
-                    b.HasIndex("RamMemoryId");
-
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("PhoneStoreBackend.Models.RamMemory", b =>
-                {
-                    b.Property<int>("RamMemoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RamMemoryId"));
-
-                    b.Property<int>("RamSize")
-                        .HasColumnType("integer");
-
-                    b.HasKey("RamMemoryId");
-
-                    b.ToTable("RamMemory");
                 });
 
             modelBuilder.Entity("PhoneStoreBackend.Models.Role", b =>
@@ -289,7 +205,7 @@ namespace PhoneStoreBackend.Migrations
                 {
                     b.HasOne("PhoneStoreBackend.Models.OrderStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusOrderStatusId")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -308,46 +224,11 @@ namespace PhoneStoreBackend.Migrations
                 {
                     b.HasOne("PhoneStoreBackend.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductPhoneID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("PhoneStoreBackend.Models.Product", b =>
-                {
-                    b.HasOne("PhoneStoreBackend.Models.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PhoneStoreBackend.Models.Memory", "Memory")
-                        .WithMany()
-                        .HasForeignKey("MemoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PhoneStoreBackend.Models.OperatingSystem", "OperatingSystem")
-                        .WithMany()
-                        .HasForeignKey("OperatingSystemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PhoneStoreBackend.Models.RamMemory", "RamMemory")
-                        .WithMany()
-                        .HasForeignKey("RamMemoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("Memory");
-
-                    b.Navigation("OperatingSystem");
-
-                    b.Navigation("RamMemory");
                 });
 
             modelBuilder.Entity("PhoneStoreBackend.Models.User", b =>

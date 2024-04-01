@@ -19,22 +19,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
-builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found")));
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found")), ServiceLifetime.Singleton);
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
+            ValidateIssuer = false,
 
-            ValidIssuer = builder.Configuration.GetSection("AuthOptions")["ISSUER"],
+            //ValidIssuer = builder.Configuration.GetSection("AuthOptions")["ISSUER"],
 
-            ValidateAudience = true,
+            ValidateAudience = false,
 
-            ValidAudience = builder.Configuration.GetSection("AuthOptions")["AUDIENCE"],
+            //ValidAudience = builder.Configuration.GetSection("AuthOptions")["AUDIENCE"],
 
             ValidateLifetime = true,
 
@@ -42,16 +51,33 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
             ValidateIssuerSigningKey = true,
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Cookies["token"];
+
+                return Task.CompletedTask;
+            }
+        };
     });
 
-builder.Services.AddTransient<UserRepository>();
-builder.Services.AddTransient<ProductRepository>();
-builder.Services.AddTransient<OrderRepository>();
-builder.Services.AddTransient<OrderDetailsRepository>();
 
-builder.Services.AddTransient<UserService>();
-builder.Services.AddTransient<ProductService>();
-builder.Services.AddTransient<OrderService>();
+
+
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderDetailsRepository>();
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<OrderService>();
+
+
 
 var app = builder.Build();
 
@@ -61,6 +87,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

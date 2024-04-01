@@ -9,6 +9,7 @@ namespace PhoneStoreBackend
         public AppMappingProfile() 
         {
             CreateMap<UserDTO, User>();
+            CreateMap<ProductDTO, Product>();
         }
 
     }

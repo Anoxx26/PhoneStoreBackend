@@ -1,17 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace PhoneStoreBackend.Models
+﻿namespace PhoneStoreBackend.Models.DTOs
 {
-    public class Product
+    public class ProductDTO
     {
-        [Key]
-        [Required]
-        public int PhoneID { get; set; }
-
         public int Price { get; set; }
-    
+
         public string Description { get; set; }
 
         public string Brand { get; set; }
@@ -35,7 +27,5 @@ namespace PhoneStoreBackend.Models
         public int BatteryCapacity { get; set; }
 
         public required string Color { get; set; }
-
-        public string ImagePath { get; set; }
     }
 }

@@ -27,6 +27,13 @@ namespace PhoneStoreBackend.Controllers
         }
 
         [Authorize]
+        [HttpPatch("UpdateOrder")]
+        public async Task<ActionResult<string>> UpdateOrders(Order order)
+        {
+            return await _orderService.UpdateOrder(order);
+        }
+
+        [Authorize]
         [HttpPost("AddOrder")]
         public async Task<ActionResult<string>> AddOrder(OrderDTO oreder)
         {

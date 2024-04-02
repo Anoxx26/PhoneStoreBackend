@@ -20,10 +20,7 @@ namespace PhoneStoreBackend.Repositories
         
         public async Task<Product> GetProductById(int id)
         {
-            using (_context)
-            {
                 return await _context.Products.FirstOrDefaultAsync(x => x.PhoneID == id);
-            }
         }
 
         public async Task AddProduct(Product product)

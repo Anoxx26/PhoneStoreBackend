@@ -26,6 +26,12 @@ namespace PhoneStoreBackend.Services
             return await _orderDetailsRepository.GetAllOrderDetails();
         }
 
+        public async Task<string> UpdateOrder(Order order)
+        {
+            await _orderRepository.UpdateOrder(order);
+
+            return "True";
+        }
         public async Task<string> AddNewOrder(OrderDTO order)
         {
 

@@ -50,9 +50,9 @@ namespace PhoneStoreBackend.Controllers
 
         [Authorize]
         [HttpPost("UpdateProduct")]
-        public async Task<ActionResult<string>> UpdateProduct(ProductDTO productDTO)
+        public async Task<ActionResult<string>> UpdateProduct(Product product)
         {
-            return await _productService.UpdateProduct(_mapper.Map<Product>(productDTO));
+            return await _productService.UpdateProduct(product);
 
         }
 

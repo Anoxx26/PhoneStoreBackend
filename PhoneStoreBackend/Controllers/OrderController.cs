@@ -27,10 +27,31 @@ namespace PhoneStoreBackend.Controllers
         }
 
         [Authorize]
+        [HttpGet("GetOrderByUserId")]
+        public async Task<ActionResult<List<Order>>> GetOrderByUserId(int userId)
+        {
+            return await _orderService.GetOrderByIdUser(userId);
+        }
+
+        [Authorize]
+        [HttpGet("GetOrderDetailById")]
+        public async Task<ActionResult<List<OrderDetails>>> GetOrderDeatilsById(int orderId)
+        {
+            return await _orderService.GetOrderDetailById(orderId);
+        }
+
+        [Authorize]
         [HttpPatch("UpdateOrder")]
         public async Task<ActionResult<string>> UpdateOrders(Order order)
         {
             return await _orderService.UpdateOrder(order);
+        }
+
+        [Authorize]
+        [HttpGet("UpdateOrderStatus")]
+        public async Task<ActionResult<string>> UpdateOrderStatus(int orderId, int statusId)
+        {
+            return await _orderService.UpdateOrderStatus(orderId, statusId);
         }
 
         [Authorize]

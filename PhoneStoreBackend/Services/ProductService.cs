@@ -57,6 +57,12 @@ namespace PhoneStoreBackend.Services
             return await _productRepository.GetProductById(id);
         }
 
+        public async Task<List<Product>> GetSearchProduct(string text)
+        {
+            List<Product> products = await _productRepository.GetAllProducts();
+
+            return products.Where(pro => pro.Model.Contains(text) || pro.Brand.Contains(text)).ToList();
+        }
 
 
         public async Task<string> UpdateProduct(Product product)

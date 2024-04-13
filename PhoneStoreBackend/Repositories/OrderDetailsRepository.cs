@@ -18,11 +18,10 @@ namespace PhoneStoreBackend.Repositories
             return await _context.OrderDetails.ToListAsync();
         }
 
-        public async Task<OrderDetails> GetOrderDetailsById(int id)
+        public async Task<List<OrderDetails>> GetOrderDetailsById(int orderId)
         {
-            return await _context.OrderDetails.FirstOrDefaultAsync(x => x.OrderDetailsID == id);
+            return await _context.OrderDetails.Include(o => o.Product).Where(o => o.OrderDetailsID == orderId).ToListAsync();
         }
-
         public async Task AddOrderDetails(OrderDetails order)
         {
             _context.OrderDetails.Add(order);

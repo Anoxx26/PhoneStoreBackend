@@ -41,7 +41,6 @@ namespace PhoneStoreBackend.Controllers
         
         }
 
-        [Authorize]
         [HttpGet("GetProductById")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {
@@ -61,6 +60,12 @@ namespace PhoneStoreBackend.Controllers
         public async Task<ActionResult<string>> DeleteProduct(int phoneID)
         {
             return await _productService.DeleteProduct(phoneID);
+        }
+
+        [HttpGet("SearchProduct")]
+        public async Task<ActionResult<List<Product>>> GetSearchProduct(string searchText)
+        {
+            return await _productService.GetSearchProduct(searchText);
         }
     }
 }

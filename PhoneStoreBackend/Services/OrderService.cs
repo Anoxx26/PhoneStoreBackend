@@ -1,6 +1,7 @@
 ﻿using PhoneStoreBackend.Models;
 using PhoneStoreBackend.Models.DTOs;
 using PhoneStoreBackend.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace PhoneStoreBackend.Services
 {
@@ -26,12 +27,36 @@ namespace PhoneStoreBackend.Services
             return await _orderDetailsRepository.GetAllOrderDetails();
         }
 
+        public async Task<List<OrderDetails>> GetOrderDetailById(int orderId)
+        {
+            return await _orderDetailsRepository.GetOrderDetailsById(orderId);
+        }
+
+        public async Task<string> UpdateOrderStatus(int orderId, int statusId)
+        {
+            Order order = await _orderRepository.GetOrderById(orderId);
+
+            order.StatusId = statusId;
+
+            await _orderRepository.UpdateOrder(order);
+
+            return "True";
+        }
+        public async Task<List<Order>> GetOrderByIdUser(int userId)
+        {
+            List<Order> orders = await _orderRepository.GetOrderByIdUser(userId);
+
+            return orders;
+        }
+
         public async Task<string> UpdateOrder(Order order)
         {
             await _orderRepository.UpdateOrder(order);
 
             return "True";
         }
+
+
         public async Task<string> AddNewOrder(OrderDTO order)
         {
 

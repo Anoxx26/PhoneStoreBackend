@@ -75,12 +75,12 @@ namespace PhoneStoreBackend.Services
 
             if (new_user == null) 
             {
-                return "False";
+                throw new SignInException("Пользователь не найден.");
             }
 
             if (new_user.UserName != user.UserName || BCrypt.Net.BCrypt.Verify(user.Password, new_user.Password) == false)
             {
-                return "False";
+                throw new SignInException("Неверный логин или пароль");
             }
 
             return await GenerateJwtToken(new_user);
@@ -122,6 +122,13 @@ namespace PhoneStoreBackend.Services
             Match match = Regex.Match(email, pattern);
 
             return match.Success;
+        }
+
+        public class SignInException : Exception
+        {
+            public SignInException(string message) : base(message)
+            {
+            }
         }
     }
 }

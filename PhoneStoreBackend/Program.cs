@@ -90,12 +90,12 @@ if (app.Environment.IsDevelopment())
 
     using (var scope = app.Services.CreateScope())
     {
-        var services = scope.ServiceProvider;
-        var context = services.GetRequiredService<ApplicationContext>();
+        //var services = scope.ServiceProvider;
+        //var context = services.GetRequiredService<ApplicationContext>();
 
-        context.Database.Migrate();
+        //context.Database.Migrate();
 
-        await context.Initialize(context);
+        //await context.Initialize(context);
     }
 }
 

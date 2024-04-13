@@ -6,6 +6,7 @@ using PhoneStoreBackend.Data;
 using PhoneStoreBackend.Models;
 using PhoneStoreBackend.Models.DTOs;
 using PhoneStoreBackend.Services;
+using static PhoneStoreBackend.Services.UserService;
 
 namespace PhoneStoreBackend.Controllers
 {
@@ -37,7 +38,19 @@ namespace PhoneStoreBackend.Controllers
         [HttpPost("SignIn")]
         public async Task<ActionResult<string>> SignIn(UserDTO userDTO)
         {
-            return await _userService.SignIn(_mapper.Map<User>(userDTO));
+            try
+            {
+                string token = await _userService.SignIn(_mapper.Map<User>(userDTO));
+                return Ok(token);
+            }
+            catch (SignInException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = ex.Message });
+            }
         }
 
         [HttpGet("GetUsers")]
@@ -58,6 +71,7 @@ namespace PhoneStoreBackend.Controllers
         {
             return "Test";
         }
+
 
     }
 }

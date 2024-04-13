@@ -15,7 +15,7 @@ namespace PhoneStoreBackend.Repositories
 
         public async Task<List<Order>> GetAllOrders()
         {
-           return await _context.Orders.ToListAsync();
+           return await _context.Orders.Include(o => o.Status).Include(o => o.User).ToListAsync();
         }
 
         public async Task<Order> GetOrderById(int id)
@@ -23,6 +23,12 @@ namespace PhoneStoreBackend.Repositories
             return await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == id);
         }
 
+        public async Task<List<Order>> GetOrderByIdUser(int userId)
+        {
+            return await _context.Orders.Include(o => o.Status).Where(o => o.UserId == userId).ToListAsync();
+        }
+
+       
         public async Task AddOrder(Order order)
         {
             _context.Orders.Add(order);
